@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Vadim Grunenko](https://up.htmlacademy.ru/javascript/19/user/507341).
-* Наставник: `Неизвестно`.
+* Наставник: [Ольга Поликашина](https://htmlacademy.ru/profile/id890283).
 
 ---
 
