@@ -30,8 +30,6 @@ var MAX_LIKES = 200;
 var MIN_AVATAR = 1;
 var MAX_AVATAR = 6;
 var MIN_COMMENTS = 1;
-var userPosts = [];
-var otherPics = document.querySelector('.pictures');
 
 // gets random element from array. gets random number in range. ---------------
 var getRandomValue = function (min, array) {
@@ -43,6 +41,7 @@ var getRandomValue = function (min, array) {
 
 // generates random data for userPosts ----------------------------------------
 var generateData = function (count) {
+  var userPosts = [];
   var photoInfo = {};
   var generateComments = function (array) {
     var userComments = [];
@@ -65,9 +64,21 @@ var generateData = function (count) {
     };
     userPosts.push(photoInfo);
   }
+  return userPosts;
 };
 
-generateData(POSTS_COUNT);
+// shulles array for more fun -------------------------------------------------
+var shuffleArray = function (array) {
+  var j;
+  var k;
+  for (var i = array.length - 1; i > 0; i--) {
+    j = getRandomValue(MIN, i);
+    k = array[i];
+    array[i] = array[j];
+    array[j] = k;
+  }
+  return array;
+};
 
 // renders posts using generated data from userPosts --------------------------
 var renderPost = function (data) {
@@ -88,4 +99,10 @@ var buildFragment = function (array) {
   return fragment;
 };
 
-otherPics.appendChild(buildFragment(userPosts));
+// shows user posts -----------------------------------------------------------
+var showPosts = function () {
+  var postedPics = document.querySelector('.pictures');
+  postedPics.appendChild(buildFragment(shuffleArray(generateData(POSTS_COUNT))));
+};
+
+showPosts();
