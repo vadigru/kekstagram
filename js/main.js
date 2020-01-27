@@ -67,7 +67,7 @@ var generateData = function (count) {
   return userPosts;
 };
 
-// shulles array for more fun -------------------------------------------------
+// shuffles array for more fun -------------------------------------------------
 var shuffleArray = function (array) {
   var j;
   var k;
