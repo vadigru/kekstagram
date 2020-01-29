@@ -118,10 +118,11 @@ var renderComments = function (array) {
   commentsBlock.textContent = '';
   array.forEach(function (item) {
     var commentElement = commentTemplate.cloneNode(true);
-    commentElement.querySelector('.social__picture').src = item.avatar;
-    commentElement.querySelector('.social__picture').alt = item.name;
-    commentElement.querySelector('.social__picture').width = '35';
-    commentElement.querySelector('.social__picture').height = '35';
+    var commentAvatar = commentElement.querySelector('.social__picture');
+    commentAvatar.src = item.avatar;
+    commentAvatar.alt = item.name;
+    commentAvatar.width = '35';
+    commentAvatar.height = '35';
     commentElement.querySelector('.social__text').textContent = item.message;
     fragment.appendChild(commentElement);
   });
@@ -129,18 +130,18 @@ var renderComments = function (array) {
 };
 
 // shows popup with big photo  --------------------------------------------------
-var showPopupPic = function (array) {
-  var bodyModalOpen = document.querySelector('BODY');
+var showPopupPic = function (item) {
+  var bodyModalOpen = document.querySelector('body');
   var popupPic = document.querySelector('.big-picture');
   bodyModalOpen.classList.add('modal-open');
   popupPic.classList.remove('hidden');
   popupPic.querySelector('.social__comment-count').classList.add('hidden');
   popupPic.querySelector('.comments-loader').classList.add('hidden');
-  popupPic.querySelector('.big-picture__img IMG').src = array.url;
-  popupPic.querySelector('.likes-count').textContent = array.likes;
-  popupPic.querySelector('.comments-count').textContent = array.comments.length;
-  popupPic.querySelector('.social__caption').textContent = array.description;
-  popupPic.querySelector('.social__comments').appendChild(renderComments(array.comments));
+  popupPic.querySelector('.big-picture__img img').src = item.url;
+  popupPic.querySelector('.likes-count').textContent = item.likes;
+  popupPic.querySelector('.comments-count').textContent = item.comments.length;
+  popupPic.querySelector('.social__caption').textContent = item.description;
+  popupPic.querySelector('.social__comments').appendChild(renderComments(item.comments));
 };
 
 showPopupPic(userPosts[0]);
