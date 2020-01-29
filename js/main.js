@@ -41,7 +41,7 @@ var getRandomValue = function (min, array) {
 
 // generates random data for userPosts ----------------------------------------
 var generateData = function (count) {
-  var userPosts = [];
+  var posts = [];
   var photoInfo = {};
   var generateComments = function (array) {
     var userComments = [];
@@ -62,12 +62,13 @@ var generateData = function (count) {
       'likes': getRandomValue(MIN_LIKES, MAX_LIKES),
       'comments': generateComments(COMMENTS)
     };
-    userPosts.push(photoInfo);
+    posts.push(photoInfo);
   }
-  return userPosts;
+
+  return posts;
 };
 
-// shuffles array for more fun -------------------------------------------------
+// shuffles array for more fun ------------------------------------------------
 var shuffleArray = function (array) {
   var j;
   var k;
@@ -79,6 +80,8 @@ var shuffleArray = function (array) {
   }
   return array;
 };
+
+var userPosts = shuffleArray(generateData(POSTS_COUNT));
 
 // renders posts using generated data from userPosts --------------------------
 var renderPost = function (data) {
@@ -100,9 +103,44 @@ var buildFragment = function (array) {
 };
 
 // shows user posts -----------------------------------------------------------
-var showPosts = function () {
+var showPosts = function (array) {
   var postedPics = document.querySelector('.pictures');
-  postedPics.appendChild(buildFragment(shuffleArray(generateData(POSTS_COUNT))));
+  postedPics.appendChild(buildFragment(array));
 };
 
-showPosts();
+showPosts(userPosts);
+
+// adds cooments to popup with big photo ----------------------------------------
+var renderComments = function (array) {
+  var fragment = document.createDocumentFragment();
+  var commentsBlock = document.querySelector('.social__comments');
+  var commentTemplate = commentsBlock.querySelector('.social__comment');
+  commentsBlock.textContent = '';
+  array.forEach(function (item) {
+    var commentElement = commentTemplate.cloneNode(true);
+    commentElement.querySelector('.social__picture').src = item.avatar;
+    commentElement.querySelector('.social__picture').alt = item.name;
+    commentElement.querySelector('.social__picture').width = '35';
+    commentElement.querySelector('.social__picture').height = '35';
+    commentElement.querySelector('.social__text').textContent = item.message;
+    fragment.appendChild(commentElement);
+  });
+  return fragment;
+};
+
+// shows popup with big photo  --------------------------------------------------
+var showPopupPic = function (array) {
+  var bodyModalOpen = document.querySelector('BODY');
+  var popupPic = document.querySelector('.big-picture');
+  bodyModalOpen.classList.add('modal-open');
+  popupPic.classList.remove('hidden');
+  popupPic.querySelector('.social__comment-count').classList.add('hidden');
+  popupPic.querySelector('.comments-loader').classList.add('hidden');
+  popupPic.querySelector('.big-picture__img IMG').src = array.url;
+  popupPic.querySelector('.likes-count').textContent = array.likes;
+  popupPic.querySelector('.comments-count').textContent = array.comments.length;
+  popupPic.querySelector('.social__caption').textContent = array.description;
+  popupPic.querySelector('.social__comments').appendChild(renderComments(array.comments));
+};
+
+showPopupPic(userPosts[0]);
