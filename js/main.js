@@ -49,11 +49,6 @@ var picturePreview = pictureEdit.querySelector('.img-upload__preview img');
 var pictureHashtag = pictureEdit.querySelector('.text__hashtags');
 var preset = pictureEdit.querySelector('.effects');
 var presetLevel = pictureEdit.querySelector('.effect-level__value');
-var presetChrome = preset.querySelector('#effect-chrome');
-var presetSepia = preset.querySelector('#effect-sepia');
-var presetMarvin = preset.querySelector('#effect-marvin');
-var presetPhobos = preset.querySelector('#effect-phobos');
-var presetHeat = preset.querySelector('#effect-heat');
 var sliderBlock = pictureEdit.querySelector('.effect-level');
 var sliderPin = sliderBlock.querySelector('.effect-level__pin');
 var sliderLine = sliderBlock.querySelector('.effect-level__line');
@@ -104,9 +99,10 @@ var onPopupEsc = function (evt) {
 
 var onPictureThumbnailClick = function (evt) {
   var target = evt.target;
-  if (target.getAttribute('data-id')) {
+  var pictureId = target.getAttribute('data-id');
+  if (pictureId) {
     evt.preventDefault();
-    showPopupPicture(userPosts[target.getAttribute('data-id')]);
+    showPopupPicture(userPosts[pictureId]);
   }
 };
 
@@ -192,28 +188,29 @@ showPosts(userPosts);
 
 // picture scale handling -----------------------------------------------------
 var getZoomNumber = function () {
-  var number = parseInt(zoomLevel.value.substring(0, zoomLevel.value.length - 1), 10);
-  return number;
+  return parseInt(zoomLevel.value.substring(0, zoomLevel.value.length - 1), 10);
 };
 
-var zoomPicture = function () {
-  picturePreview.style.transform = 'scale(' + getZoomNumber() / 100 + ')';
+var zoomPicture = function (num) {
+  picturePreview.style.transform = 'scale(' + num / 100 + ')';
 };
 
 var onZoomPlusClick = function () {
-  if (getZoomNumber() === MAX_ZOOM) {
+  var zoomNumber = getZoomNumber();
+  if (zoomNumber === MAX_ZOOM) {
     return;
   }
-  zoomLevel.value = getZoomNumber() + STEP_ZOOM + '%';
-  zoomPicture();
+  zoomLevel.value = zoomNumber + STEP_ZOOM + '%';
+  zoomPicture(zoomNumber);
 };
 
 var onZoomMinusClick = function () {
-  if (getZoomNumber() === MIN_ZOOM) {
+  var zoomNumber = getZoomNumber();
+  if (zoomNumber === MIN_ZOOM) {
     return;
   }
-  zoomLevel.value = getZoomNumber() - STEP_ZOOM + '%';
-  zoomPicture();
+  zoomLevel.value = zoomNumber - STEP_ZOOM + '%';
+  zoomPicture(zoomNumber);
 };
 
 // get values for filters -----------------------------------------------------
@@ -248,6 +245,12 @@ var hideSlider = function () {
 
 // change filter saturation --------------------------------------------------
 var onSliderPinMouseup = function () {
+  var presetChrome = preset.querySelector('#effect-chrome');
+  var presetSepia = preset.querySelector('#effect-sepia');
+  var presetMarvin = preset.querySelector('#effect-marvin');
+  var presetPhobos = preset.querySelector('#effect-phobos');
+  var presetHeat = preset.querySelector('#effect-heat');
+
   if (presetChrome.checked) {
     picturePreview.style.filter = 'grayscale(' + getSaturation() / 100 + ')';
   }
@@ -373,7 +376,7 @@ var showPopupPicture = function (item) {
 };
 
 // hashtags validation --------------------------------------------------------
-var isHashtagHaveSharp = function (arr) {
+var isHashSymbolAbsent = function (arr) {
   var result = false;
   arr.forEach(function (item) {
     if (item.charAt(0) !== '#' && item !== '') {
@@ -405,15 +408,12 @@ var isHashtagTooLong = function (arr) {
 
 var isSimilarElement = function (arr) {
   var result = false;
-  var lowercaseArr = [];
-  arr.forEach(function (item) {
-    lowercaseArr.push(item.toLowerCase());
+  var lowercaseArr = arr.map(function (item) {
+    return item.toLowerCase();
   });
   lowercaseArr.forEach(function (item, i) {
     if (lowercaseArr.indexOf(item, i + 1) > -1 && item !== '') {
-      if (result.indexOf(item) === -1) {
-        result = true;
-      }
+      result = true;
     }
   });
   return result;
@@ -432,7 +432,7 @@ var isSpecialCharacter = function (arr) {
 
 var onSubmitButtonClick = function () {
   var hashtags = pictureHashtag.value.split(' ');
-  if (isHashtagHaveSharp(hashtags)) {
+  if (isHashSymbolAbsent(hashtags)) {
     pictureHashtag.setCustomValidity('Хэш-тег должен начинаться с "#".');
   } else if (isHashtagEmpty(hashtags)) {
     pictureHashtag.setCustomValidity('Хэш-тег не может быть пустым.');
