@@ -1,8 +1,10 @@
 'use strict';
 (function () {
-  var pictureEdit = document.querySelector('.img-upload__overlay');
-  var picturePreview = pictureEdit.querySelector('.img-upload__preview img');
-  var zoom = pictureEdit.querySelector('.scale');
+  var MIN_ZOOM = 25;
+  var STEP_ZOOM = 25;
+  var MAX_ZOOM = 100;
+  var pictureScale = window.const.pictureEdit.querySelector('.img-upload__preview img');
+  var zoom = window.const.pictureEdit.querySelector('.scale');
   var zoomLevel = zoom.querySelector('.scale__control--value');
 
   // picture scale handling -----------------------------------------------------
@@ -11,25 +13,25 @@
   };
 
   var zoomPicture = function (num) {
-    picturePreview.style.transform = 'scale(' + num / 100 + ')';
+    pictureScale.style.transform = 'scale(' + num / 100 + ')';
   };
 
   var onZoomPlusClick = function () {
     var zoomNumber = getZoomNumber();
-    if (zoomNumber === window.const.MAX_ZOOM) {
+    if (zoomNumber === MAX_ZOOM) {
       return;
     }
-    zoomNumber += window.const.STEP_ZOOM;
+    zoomNumber += STEP_ZOOM;
     zoomLevel.value = zoomNumber + '%';
     zoomPicture(zoomNumber);
   };
 
   var onZoomMinusClick = function () {
     var zoomNumber = getZoomNumber();
-    if (zoomNumber === window.const.MIN_ZOOM) {
+    if (zoomNumber === MIN_ZOOM) {
       return;
     }
-    zoomNumber -= window.const.STEP_ZOOM;
+    zoomNumber -= STEP_ZOOM;
     zoomLevel.value = zoomNumber + '%';
     zoomPicture(zoomNumber);
   };

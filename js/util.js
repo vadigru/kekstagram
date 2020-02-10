@@ -1,5 +1,10 @@
 'use strict';
 (function () {
+  var KeyCode = {
+    ENTER: 'Enter',
+    ESC: 'Escape'
+  };
+
   // get random element from array. get random number in range. ---------------
   var getRandomValue = function (min, array) {
     var max = array;
@@ -23,14 +28,14 @@
 
   // escape button press handler ----------------------------------------------
   var isEscEvent = function (evt, action) {
-    if (evt.key === window.const.KeyCode.ESC) {
+    if (evt.key === KeyCode.ESC) {
       action();
     }
   };
 
   // enter button press handler -----------------------------------------------
   var isEnterEvent = function (evt, action) {
-    if (evt.key === window.const.KeyCode.ENTER) {
+    if (evt.key === KeyCode.ENTER) {
       action();
     }
   };

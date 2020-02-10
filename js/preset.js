@@ -1,5 +1,10 @@
 'use strict';
 (function () {
+  var BLUR_VALUE = 3;
+  var BRIGHTNESS_VALUE = 2;
+  var BRIGHTNESS_CORRECTION = 1;
+  var DEFAULT_PIN_POSITION = '455';
+  var DEFAULT_LINE_WIDTH = '455';
   var picturePreview = document.querySelector('.img-upload__preview img');
   var sliderBlock = document.querySelector('.effect-level');
   var sliderPresetLevel = sliderBlock.querySelector('.effect-level__value');
@@ -21,8 +26,8 @@
     picturePreview.style.filter = '';
     sliderPresetLevel.value = '';
     picturePreview.className = '';
-    sliderPin.style.left = window.const.DEFAULT_PIN_POSITION + 'px';
-    sliderDepthLine.style.width = window.const.DEFAULT_LINE_WIDTH + 'px';
+    sliderPin.style.left = DEFAULT_PIN_POSITION + 'px';
+    sliderDepthLine.style.width = DEFAULT_LINE_WIDTH + 'px';
   };
 
   // get values for presets -----------------------------------------------------
@@ -34,16 +39,16 @@
   };
 
   var getBlur = function () {
-    var value = ((sliderPin.offsetLeft * window.const.BLUR_VALUE)
+    var value = ((sliderPin.offsetLeft * BLUR_VALUE)
                           / sliderLine.clientWidth).toFixed(2);
     sliderPresetLevel.value = value;
     return value;
   };
 
   var getBrightness = function () {
-    var value = ((sliderPin.offsetLeft * window.const.BRIGHTNESS_VALUE)
+    var value = ((sliderPin.offsetLeft * BRIGHTNESS_VALUE)
                           / sliderLine.clientWidth
-                          + window.const.BRIGHTNESS_CORRECTION).toFixed(2);
+                          + BRIGHTNESS_CORRECTION).toFixed(2);
     sliderPresetLevel.value = value;
     return value;
   };
