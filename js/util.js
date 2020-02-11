@@ -4,6 +4,7 @@
     ENTER: 'Enter',
     ESC: 'Escape'
   };
+  var MIN_VALUE = 0;
 
   // get random element from array. get random number in range. ---------------
   var getRandomValue = function (min, array) {
@@ -18,7 +19,7 @@
     var j;
     var k;
     for (var i = array.length - 1; i > 0; i--) {
-      j = getRandomValue(window.const.MIN, i);
+      j = getRandomValue(MIN_VALUE, i);
       k = array[i];
       array[i] = array[j];
       array[j] = k;

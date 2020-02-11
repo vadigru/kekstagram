@@ -1,7 +1,11 @@
 'use strict';
 (function () {
-  var BLUR_VALUE = 3;
-  var BRIGHTNESS_VALUE = 2;
+  var MIN_BLUR = 0;
+  var MAX_BLUR = 3;
+  var MIN_BRIGHTNESS = 1;
+  var MAX_BRIGHTNESS = 2;
+  var MIN_SATURATION = 0;
+  var MAX_SATURATION = 100;
   var BRIGHTNESS_CORRECTION = 1;
   var DEFAULT_PIN_POSITION = '455';
   var DEFAULT_LINE_WIDTH = '455';
@@ -32,24 +36,21 @@
 
   // get values for presets -----------------------------------------------------
   var getSaturation = function () {
-    var value = Math.floor((sliderPin.offsetLeft * 100)
+    var value = Math.floor((sliderPin.offsetLeft * MAX_SATURATION)
                           / sliderLine.clientWidth);
-    sliderPresetLevel.value = value;
     return value;
   };
 
   var getBlur = function () {
-    var value = ((sliderPin.offsetLeft * BLUR_VALUE)
+    var value = ((sliderPin.offsetLeft * MAX_BLUR)
                           / sliderLine.clientWidth).toFixed(2);
-    sliderPresetLevel.value = value;
     return value;
   };
 
   var getBrightness = function () {
-    var value = ((sliderPin.offsetLeft * BRIGHTNESS_VALUE)
+    var value = ((sliderPin.offsetLeft * MAX_BRIGHTNESS)
                           / sliderLine.clientWidth
                           + BRIGHTNESS_CORRECTION).toFixed(2);
-    sliderPresetLevel.value = value;
     return value;
   };
 
@@ -61,21 +62,47 @@
     var presetMarvin = preset.querySelector('#effect-marvin');
     var presetPhobos = preset.querySelector('#effect-phobos');
     var presetHeat = preset.querySelector('#effect-heat');
+    var presetResult;
+
+    var roundPresetRange = function (item, min, max) {
+      if (item > max) {
+        item = max;
+      }
+      if (item < min) {
+        item = min;
+      }
+      return item;
+    };
+
+    var setInputValue = function (item) {
+      sliderPresetLevel.value = item;
+    };
 
     if (presetChrome.checked) {
-      picturePreview.style.filter = 'grayscale(' + getSaturation() / 100 + ')';
+      presetResult = roundPresetRange((getSaturation() / 100), MIN_SATURATION, MAX_SATURATION);
+      picturePreview.style.filter = 'grayscale(' + presetResult + ')';
+      setInputValue(presetResult);
     }
     if (presetSepia.checked) {
-      picturePreview.style.filter = 'sepia(' + getSaturation() / 100 + ')';
+      presetResult = roundPresetRange((getSaturation() / 100), MIN_SATURATION, MAX_SATURATION);
+      picturePreview.style.filter = 'sepia(' + presetResult + ')';
+      setInputValue(presetResult);
     }
     if (presetMarvin.checked) {
-      picturePreview.style.filter = 'invert(' + getSaturation() + '%' + ')';
+      presetResult = roundPresetRange(getSaturation(), MIN_SATURATION, MAX_SATURATION);
+      picturePreview.style.filter = 'invert(' + presetResult + '%' + ')';
+      setInputValue(presetResult);
     }
     if (presetPhobos.checked) {
-      picturePreview.style.filter = 'blur(' + getBlur() + 'px' + ')';
+      presetResult = roundPresetRange(getBlur(), MIN_BLUR, MAX_BLUR);
+      picturePreview.style.filter = 'blur(' + presetResult + 'px' + ')';
+      setInputValue(presetResult);
     }
     if (presetHeat.checked) {
-      picturePreview.style.filter = 'brightness(' + getBrightness() + ')';
+      presetResult = roundPresetRange(getBrightness(), MIN_BRIGHTNESS, (MAX_BRIGHTNESS
+        + BRIGHTNESS_CORRECTION));
+      picturePreview.style.filter = 'brightness(' + presetResult + ')';
+      setInputValue(presetResult);
     }
   };
 

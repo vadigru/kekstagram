@@ -25,6 +25,7 @@
     'Так просто потому что можем'
   ];
   var POSTS_COUNT = 25;
+  var MIN = 0;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var MIN_AVATAR = 1;
@@ -40,8 +41,8 @@
       for (var j = 0; j < window.util.getRandomValue(MIN_COMMENTS, array.length); j++) {
         var comment = {
           'avatar': 'img/avatar-' + window.util.getRandomValue(MIN_AVATAR, MAX_AVATAR) + '.svg',
-          'message': window.util.getRandomValue(window.const.MIN, COMMENTS),
-          'name': window.util.getRandomValue(window.const.MIN, COMMENTATORS)
+          'message': window.util.getRandomValue(MIN, COMMENTS),
+          'name': window.util.getRandomValue(MIN, COMMENTATORS)
         };
         userComments.push(comment);
       }
@@ -50,7 +51,7 @@
     for (var i = 1; i <= count; i++) {
       photoInfo = {
         'url': 'photos/' + i + '.jpg',
-        'description': window.util.getRandomValue(window.const.MIN, DESCRIPTIONS),
+        'description': window.util.getRandomValue(MIN, DESCRIPTIONS),
         'likes': window.util.getRandomValue(MIN_LIKES, MAX_LIKES),
         'comments': generateComments(COMMENTS)
       };

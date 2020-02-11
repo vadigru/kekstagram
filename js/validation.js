@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var MAX_HASHTAG_COUNT = 5;
   // hashtags validation --------------------------------------------------------
   // check if hashtag have hash symbol ------------------------------------------
   var isHashSymbolAbsent = function (arr) {
@@ -60,6 +61,15 @@
     return result;
   };
 
+  // check if none of hashtags presents ---------------------------------------
+  var isHashtagPresent = function (arr) {
+    var result = false;
+    if (arr.length === 1 && arr[0] === '') {
+      result = true;
+    }
+    return result;
+  };
+
   // hashtag errors handler ---------------------------------------------------
   var onSubmitButtonClick = function () {
     var pictureHashtag = document.querySelector('.text__hashtags');
@@ -71,13 +81,13 @@
     } else if (isHashtagTooLong(hashtags)) {
       pictureHashtag.setCustomValidity('Слишком длинный хэш-тег. ' +
                                       'Максимальная длина хэш-тега 20 символов.');
-    } else if (hashtags.length > 5) {
+    } else if (hashtags.length > MAX_HASHTAG_COUNT) {
       pictureHashtag.setCustomValidity('Введенных хэш-тегов ' + hashtags.length +
                                       '. ' + 'Максимальная количество хэш-тегов "5".');
     } else if (isSimilarElement(hashtags)) {
       pictureHashtag.setCustomValidity('Хэш-теги не могут быть одинаковыми.');
-    } else if (isSpecialCharacter(hashtags)) {
-      pictureHashtag.setCustomValidity('Хэш-тег должн состоять из букв и чисел и ' +
+    } else if (!isHashtagPresent(hashtags) && isSpecialCharacter(hashtags)) {
+      pictureHashtag.setCustomValidity('Хэш-тег должен состоять из букв и чисел и ' +
                                       'не может содержать пробелы, спецсимволы, ' +
                                       'символы пунктуации, эмодзи и т.д.');
     } else {
