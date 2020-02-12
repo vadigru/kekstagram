@@ -1,21 +1,26 @@
 'use strict';
 (function () {
+  var PIN_WIDTH = 18;
+  var PIN_HALF = PIN_WIDTH / 2;
   var MIN_PIN_POSITION = 0;
-  var MAX_PIN_POSITION = 455;
+  var MAX_PIN_POSITION = 453;
   var sliderBlock = document.querySelector('.effect-level');
   var sliderPin = sliderBlock.querySelector('.effect-level__pin');
   var sliderDepthLine = sliderBlock.querySelector('.effect-level__depth');
 
   // change slider pin position -----------------------------------------------
   var setPinPosition = function (shift) {
-    if (sliderPin.offsetLeft <= MIN_PIN_POSITION) {
-      sliderPin.style.left = MIN_PIN_POSITION + 'px';
-    } else if (sliderPin.offsetLeft >= MAX_PIN_POSITION) {
-      sliderPin.style.left = MAX_PIN_POSITION + 'px';
+    var shiftedLeft = sliderPin.offsetLeft - shift;
+    if (shiftedLeft < MIN_PIN_POSITION + PIN_HALF) {
+      sliderPin.style.left = MIN_PIN_POSITION + PIN_HALF + 'px';
+    } else if (shiftedLeft > MAX_PIN_POSITION - PIN_HALF) {
+      sliderPin.style.left = MAX_PIN_POSITION - PIN_HALF + 'px';
+    } else {
+      sliderPin.style.left = shiftedLeft + 'px';
+      sliderDepthLine.style.width = shiftedLeft + 'px';
     }
-    sliderPin.style.left = sliderPin.offsetLeft - shift + 'px';
-    sliderDepthLine.style.width = sliderPin.offsetLeft - shift + 'px';
   };
+
 
   // slider listener ----------------------------------------------------------
   sliderPin.addEventListener('mousedown', function (evt) {
@@ -32,6 +37,7 @@
       startCoords = {
         x: moveEvt.clientX
       };
+
       setPinPosition(shift.x);
       window.preset.setPresetValue();
     };
