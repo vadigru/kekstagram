@@ -3,9 +3,9 @@
   var MIN_ZOOM = 25;
   var STEP_ZOOM = 25;
   var MAX_ZOOM = 100;
-  var pictureScale = window.const.pictureEdit.querySelector('.img-upload__preview img');
-  var zoom = window.const.pictureEdit.querySelector('.scale');
-  var zoomLevel = zoom.querySelector('.scale__control--value');
+  var pictureEdit = document.querySelector('.img-upload__overlay');
+  var pictureZoom = pictureEdit.querySelector('.img-upload__preview img');
+  var zoomLevel = pictureEdit.querySelector('.scale__control--value');
 
   // picture scale handling -----------------------------------------------------
   var getZoomNumber = function () {
@@ -13,7 +13,7 @@
   };
 
   var zoomPicture = function (num) {
-    pictureScale.style.transform = 'scale(' + num / 100 + ')';
+    pictureZoom.style.transform = 'scale(' + num / 100 + ')';
   };
 
   var onZoomPlusClick = function () {

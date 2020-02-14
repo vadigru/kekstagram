@@ -2,15 +2,15 @@
 (function () {
   var body = document.querySelector('body');
   var picturePreview = document.querySelector('.big-picture');
+  var picturePreviewClose = picturePreview.querySelector('.big-picture__cancel');
   var pictureUpload = document.querySelector('#upload-file');
-  var preset = window.const.pictureEdit.querySelector('.effects');
-  var zoom = document.querySelector('.scale');
-  var zoomOut = zoom.querySelector('.scale__control--smaller');
-  var zoomLevel = zoom.querySelector('.scale__control--value');
-  var zoomIn = zoom.querySelector('.scale__control--bigger');
-  var submitButton = window.const.pictureEdit.querySelector('.img-upload__submit');
-  var picturePreviewClose = document.querySelector('.big-picture__cancel');
-  var pictureEditClose = window.const.pictureEdit.querySelector('.img-upload__cancel');
+  var pictureEdit = document.querySelector('.img-upload__overlay');
+  var pictureEditClose = pictureEdit.querySelector('.img-upload__cancel');
+  var zoomOut = pictureEdit.querySelector('.scale__control--smaller');
+  var zoomLevel = pictureEdit.querySelector('.scale__control--value');
+  var zoomIn = pictureEdit.querySelector('.scale__control--bigger');
+  var preset = pictureEdit.querySelector('.effects');
+  var submitButton = pictureEdit.querySelector('.img-upload__submit');
 
   // popup open handlers ------------------------------------------------------
   var bodyModalOpen = function () {
@@ -28,12 +28,6 @@
 
   var onThumbnailEnterPress = function (evt) {
     window.util.isEnterEvent(evt, onThumbnailClick);
-  };
-
-  var onUploadClick = function () {
-    showPictureEdit();
-    window.preset.hideSlider();
-    bodyModalOpen();
   };
 
   // popup close handlers -----------------------------------------------------
@@ -57,8 +51,8 @@
 
   // show/hide popup of picture edit ------------------------------------------
   var preventPictureEditClose = function () {
-    var pictureHashtag = window.const.pictureEdit.querySelector('.text__hashtags');
-    var pictureComment = window.const.pictureEdit.querySelector('.text__description');
+    var pictureHashtag = pictureEdit.querySelector('.text__hashtags');
+    var pictureComment = pictureEdit.querySelector('.text__description');
     pictureHashtag.addEventListener('focus', function () {
       document.removeEventListener('keydown', onPopupEsc);
     });
@@ -75,7 +69,7 @@
   };
 
   var hidePictureEdit = function () {
-    window.const.pictureEdit.classList.add('hidden');
+    pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
     zoomIn.removeEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.removeEventListener('click', window.zoom.onZoomMinusClick);
@@ -86,15 +80,16 @@
   };
 
   var showPictureEdit = function () {
-    window.const.pictureEdit.classList.remove('hidden');
+    pictureEdit.classList.remove('hidden');
     zoomLevel.value = '100%';
-    window.preset.resetPreset();
+    window.preset.hideSlider();
     zoomIn.addEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.addEventListener('click', window.zoom.onZoomMinusClick);
     preset.addEventListener('click', window.preset.onPresetClick);
     submitButton.addEventListener('click', window.validation.onSubmitButtonClick);
     pictureEditClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
+    bodyModalOpen();
     preventPictureEditClose();
   };
 
@@ -143,7 +138,7 @@
     var picturesBlock = document.querySelector('.pictures');
     picturesBlock.addEventListener('click', onThumbnailClick);
     picturesBlock.addEventListener('click', onThumbnailEnterPress);
-    pictureUpload.addEventListener('change', onUploadClick);
+    pictureUpload.addEventListener('change', showPictureEdit);
   };
 
   addListeners();
