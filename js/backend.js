@@ -10,12 +10,10 @@
     INTERNAL_SERVER_ERROR: 500,
   };
 
-  // обработка успешного/не успешного запроса ---------------------------------
+  // success/unsuccess request handling ---------------------------------------
   var setup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
-
     xhr.responseType = 'json';
-
     xhr.addEventListener('load', function () {
       if (xhr.status === Code.OK) {
         onLoad(xhr.response);
@@ -27,28 +25,24 @@
         onError('Внутренняя ошибка сервера: ' + xhr.status);
       }
     });
-
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения.');
     });
-
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс.');
     });
-
     xhr.timeout = SERVER_TIME;
-
     return xhr;
   };
 
-  // загрузка данных с сервера ------------------------------------------------
+  // data load from server ----------------------------------------------------
   var load = function (onLoad, onError) {
     var xhr = setup(onLoad, onError);
     xhr.open('GET', LOAD_URL);
     xhr.send();
   };
 
-  // выгрузка данных на сервер ------------------------------------------------
+  // data upload to server ----------------------------------------------------
   var upload = function (data, onLoad, onError) {
     var xhr = setup(onLoad, onError);
     xhr.open('POST', UPLOAD_URL);
