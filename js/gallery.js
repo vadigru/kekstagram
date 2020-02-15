@@ -27,5 +27,16 @@
     postedPics.appendChild(buildFragment(array));
   };
 
-  showPosts(window.userPosts);
+  var onLoadSuccessHandle = function (data) {
+    window.userPosts = data.map(function (item) {
+      return item;
+    });
+    showPosts(window.userPosts);
+  };
+
+  var onLoadErrorHandle = function (errorMessage) {
+    window.util.showErrorModal(errorMessage);
+  };
+
+  window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
 })();

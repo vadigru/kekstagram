@@ -197,6 +197,21 @@
     </div>
   </footer>
 
+  <section class="modal modal--error modal--hidden">
+    <div class="modal__inner">
+      <button class="modal__close cancel" type="button">Закрыть окно</button>
+      <h3 class="modal__title">Ошибка!</h3>
+      <p class="modal__message">Пожалуйста, перезагрузите страницу.</p>
+    </div>
+  </section>
+
+  <section class="modal modal--success modal--hidden">
+    <div class="modal__inner">
+      <button class="modal__close cancel" type="button">Закрыть окно</button>
+      <h3 class="modal__title">Данные успешно отправлены!</h3>
+    </div>
+  </section>
+
   <!-- Шаблон изображения случайного пользователя -->
   <template id="picture">
     <a href="#" class="picture">
@@ -233,8 +248,11 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
 
+    <!-- Сообщение с ошибкой загрузки изображения -->
+
+
   <script src="js/util.js"></script>
-  <script src="js/data.js"></script>
+  <script src="js/backend.js"></script>
   <script src="js/gallery.js"></script>
   <script src="js/popup.js"></script>
   <script src="js/zoom.js"></script>

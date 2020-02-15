@@ -5,6 +5,7 @@
     ESC: 'Escape'
   };
   var MIN_VALUE = 0;
+  var popupError = document.querySelector('.modal--error');
 
   // get random element from array. get random number in range. ---------------
   var getRandomValue = function (min, array) {
@@ -41,10 +42,30 @@
     }
   };
 
+  // show request error popup -------------------------------------------------
+  var showErrorModal = function (message) {
+    var modalText = popupError.querySelector('.modal__message');
+    popupError.classList.remove('modal--hidden');
+    modalText.textContent = message;
+    popupError.addEventListener('click', onModalErrorClick);
+    document.addEventListener('keydown', window.popup.onPopupEsc);
+  };
+
+  // hide request error popup -------------------------------------------------
+  var onModalErrorClick = function (evt) {
+    var target = evt.target;
+    if (target.classList.contains('modal') || target.classList.contains('modal__close')) {
+      popupError.classList.add('modal--hidden');
+    }
+    popupError.removeEventListener('click', onModalErrorClick);
+    document.removeEventListener('keydown', window.popup.onPopupEsc);
+  };
+
   window.util = {
     getRandomValue: getRandomValue,
     shuffleArray: shuffleArray,
     isEscEvent: isEscEvent,
-    isEnterEvent: isEnterEvent
+    isEnterEvent: isEnterEvent,
+    showErrorModal: showErrorModal
   };
 })();

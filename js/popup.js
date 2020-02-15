@@ -11,6 +11,7 @@
   var zoomIn = pictureEdit.querySelector('.scale__control--bigger');
   var preset = pictureEdit.querySelector('.effects');
   var submitButton = pictureEdit.querySelector('.img-upload__submit');
+  var form = document.querySelector('.img-upload__form');
 
   // popup open handlers ------------------------------------------------------
   var bodyModalOpen = function () {
@@ -31,6 +32,12 @@
   };
 
   // popup close handlers -----------------------------------------------------
+  var hidePopupError = function () {
+    var popupError = document.querySelector('.modal--error');
+    popupError.classList.add('modal--hidden');
+    document.removeEventListener('keydown', window.popup.onPopupEsc);
+  };
+
   var bodyModalClose = function () {
     body.classList.remove('modal-open');
   };
@@ -38,6 +45,7 @@
   var popupClose = function () {
     hidePictureEdit();
     hidePicturePreview();
+    hidePopupError();
     bodyModalClose();
   };
 
@@ -71,6 +79,7 @@
   var hidePictureEdit = function () {
     pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
+    form.reset();
     zoomIn.removeEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.removeEventListener('click', window.zoom.onZoomMinusClick);
     preset.removeEventListener('click', window.preset.onPresetClick);
@@ -82,6 +91,7 @@
   var showPictureEdit = function () {
     pictureEdit.classList.remove('hidden');
     zoomLevel.value = '100%';
+    window.preset.resetPreset();
     window.preset.hideSlider();
     zoomIn.addEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.addEventListener('click', window.zoom.onZoomMinusClick);
@@ -142,4 +152,9 @@
   };
 
   addListeners();
+
+  window.popup = {
+    onCrossClickClose: onCrossClickClose,
+    onPopupEsc: onPopupEsc
+  };
 })();

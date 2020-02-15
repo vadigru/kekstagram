@@ -1443,3 +1443,44 @@ main {
     grid-row: 1 / span 3;
   }
 }
+
+.modal {
+  width: 100%;
+  height: 580px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 65px;
+}
+
+.modal--hidden {
+
+  display: none;
+}
+
+.modal__inner {
+  width: 580px;
+  height: 200px;
+  background-color: tomato;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.modal__title {
+  font-size: 25px;
+}
+
+.modal__message {
+  font-size: 20px;
+}
+
+.modal__close {
+  position: absolute;
+  top: 0;
+  right: -50px;
+}
