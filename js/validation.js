@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var MAX_HASHTAG_COUNT = 5;
+
   // hashtags validation --------------------------------------------------------
   // check if hashtag is empty ------------------------------------------------
   var isHashtagEmpty = function (arr) {

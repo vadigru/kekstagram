@@ -3,6 +3,7 @@
   var MAX_BLUR = 3;
   var MAX_BRIGHTNESS = 3;
   var BRIGHTNESS_CORRECTION = 1;
+  var MIN_PIN_POSITION = 0;
   var picturePreview = document.querySelector('.img-upload__preview img');
   var sliderBlock = document.querySelector('.effect-level');
   var sliderPresetLevel = sliderBlock.querySelector('.effect-level__value');
@@ -79,25 +80,26 @@
     sliderPresetLevel.value = presetResult;
   };
 
+  var toggleSlider = function (isVisible) {
+    sliderBlock.classList.toggle('hidden', isVisible);
+  };
+
   // filter select from filter list ---------------------------------------------
   var onPresetClick = function (evt) {
     var target = evt.target;
     sliderLineWidth = sliderLine.offsetWidth;
     resetPreset();
     showSlider();
-    if (target.value === 'none') {
-      hideSlider();
-    }
+    toggleSlider(target.value === 'none');
     picturePreview.classList.add('effects__preview--' + target.value);
   };
 
   // change slider pin position -----------------------------------------------
   var setPinPosition = function (shift) {
     var shiftedLeft = sliderPin.offsetLeft - shift;
-    var minPinPosition = sliderLineWidth - sliderLineWidth;
     var maxPinPosition = sliderLineWidth;
 
-    if (shiftedLeft >= minPinPosition && shiftedLeft <= maxPinPosition) {
+    if (shiftedLeft >= MIN_PIN_POSITION && shiftedLeft <= maxPinPosition) {
       sliderPin.style.left = shiftedLeft + 'px';
       sliderDepthLine.style.width = shiftedLeft + 'px';
     }

@@ -11,34 +11,22 @@
   var zoomIn = pictureEdit.querySelector('.scale__control--bigger');
   var preset = pictureEdit.querySelector('.effects');
   var submitButton = pictureEdit.querySelector('.img-upload__submit');
+  var form = document.querySelector('.img-upload__form');
 
-  // popup open handlers ------------------------------------------------------
-  var bodyModalOpen = function () {
+  // page scroll handling when popup is opened ----------------------------------
+  var backgroundScrollStop = function () {
     body.classList.add('modal-open');
   };
 
-  var onThumbnailClick = function (evt) {
-    var target = evt.target;
-    var pictureId = target.getAttribute('data-id');
-    if (pictureId) {
-      evt.preventDefault();
-      showPicturePreview(window.userPosts[pictureId]);
-    }
-  };
-
-  var onThumbnailEnterPress = function (evt) {
-    window.util.isEnterEvent(evt, onThumbnailClick);
-  };
-
-  // popup close handlers -----------------------------------------------------
-  var bodyModalClose = function () {
+  var backgroundScrollStart = function () {
     body.classList.remove('modal-open');
   };
 
+  // popup close handlers -----------------------------------------------------
   var popupClose = function () {
     hidePictureEdit();
     hidePicturePreview();
-    bodyModalClose();
+    backgroundScrollStart();
   };
 
   var onCrossClickClose = function () {
@@ -71,6 +59,7 @@
   var hidePictureEdit = function () {
     pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
+    form.reset();
     zoomIn.removeEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.removeEventListener('click', window.zoom.onZoomMinusClick);
     preset.removeEventListener('click', window.preset.onPresetClick);
@@ -82,6 +71,7 @@
   var showPictureEdit = function () {
     pictureEdit.classList.remove('hidden');
     zoomLevel.value = '100%';
+    window.preset.resetPreset();
     window.preset.hideSlider();
     zoomIn.addEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.addEventListener('click', window.zoom.onZoomMinusClick);
@@ -89,7 +79,7 @@
     submitButton.addEventListener('click', window.validation.onSubmitButtonClick);
     pictureEditClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
-    bodyModalOpen();
+    backgroundScrollStop();
     preventPictureEditClose();
   };
 
@@ -130,16 +120,15 @@
     picturePreview.querySelector('.social__comments').appendChild(renderComments(item.comments));
     picturePreviewClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
-    bodyModalOpen();
+    backgroundScrollStop();
   };
 
-  // add listeners to pictures preview and upload field -----------------------
-  var addListeners = function () {
-    var picturesBlock = document.querySelector('.pictures');
-    picturesBlock.addEventListener('click', onThumbnailClick);
-    picturesBlock.addEventListener('click', onThumbnailEnterPress);
-    pictureUpload.addEventListener('change', showPictureEdit);
-  };
+  pictureUpload.addEventListener('change', showPictureEdit);
 
-  addListeners();
+  window.popup = {
+    onCrossClickClose: onCrossClickClose,
+    onPopupEsc: onPopupEsc,
+    showPicturePreview: showPicturePreview,
+    showPictureEdit: showPictureEdit
+  };
 })();

@@ -1,5 +1,21 @@
 'use strict';
 (function () {
+  var userPosts = [];
+
+  // open big picture on thumbnail click --------------------------------------
+  var onThumbnailClick = function (evt) {
+    var target = evt.target;
+    var pictureId = target.getAttribute('data-id');
+    if (pictureId) {
+      evt.preventDefault();
+      window.popup.showPicturePreview(userPosts[pictureId]);
+    }
+  };
+
+  var onThumbnailEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, onThumbnailClick);
+  };
+
   // render posts using generated data from userPosts --------------------------
   var renderPost = function (data, index) {
     var template = document.querySelector('#picture').content;
@@ -21,11 +37,30 @@
     return fragment;
   };
 
+  // add listeners to pictures preview and upload field -----------------------
+  var addListeners = function () {
+    var picturesBlock = document.querySelector('.pictures');
+    picturesBlock.addEventListener('click', onThumbnailClick);
+    picturesBlock.addEventListener('click', onThumbnailEnterPress);
+  };
+
   // show user posts -----------------------------------------------------------
   var showPosts = function (array) {
     var postedPics = document.querySelector('.pictures');
     postedPics.appendChild(buildFragment(array));
   };
 
-  showPosts(window.userPosts);
+  var onLoadSuccessHandle = function (data) {
+    userPosts = data.map(function (item) {
+      return item;
+    });
+    showPosts(userPosts);
+    addListeners();
+  };
+
+  var onLoadErrorHandle = function (errorMessage) {
+    window.util.showErrorModal(errorMessage);
+  };
+
+  window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
 })();
