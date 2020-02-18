@@ -7,6 +7,7 @@
 
   var hideModalError = function () {
     pageMain.removeChild(modalError);
+    window.popup.backgroundScrollStart();
     document.removeEventListener('keydown', onModalErrorEscPress);
   };
 
