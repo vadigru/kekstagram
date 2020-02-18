@@ -41,7 +41,7 @@
 
   // check if hashtag have special characters ---------------------------------
   var isSpecialCharacter = function (arr) {
-    var allowedSymbols = /^[#][\W\w]+$/;
+    var allowedSymbols = /^[#][\w]+$/;
     var result = false;
     arr.forEach(function (item) {
       if (!item.match(allowedSymbols)) {
@@ -62,13 +62,13 @@
 
   var onSubmitSuccessHandle = function () {
     window.popup.hidePictureEdit();
-    window.modal.showSuccessModal();
+    window.modal.showModalSuccess();
   };
 
   var onSubmitErrorHandle = function () {
     var errorMessage = 'Ошибка отправки данных.';
     window.popup.hidePictureEdit();
-    window.modal.showErrorModal(errorMessage);
+    window.modal.showModalError(errorMessage);
   };
 
   var arrangeValidation = function (evt) {

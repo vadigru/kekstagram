@@ -59,7 +59,7 @@
   };
 
   var onLoadErrorHandle = function (errorMessage) {
-    window.modal.showErrorModal(errorMessage);
+    window.modal.showModalError(errorMessage);
   };
 
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
