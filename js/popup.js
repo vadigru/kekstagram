@@ -123,12 +123,12 @@
     backgroundScrollStop();
   };
 
-  pictureUpload.addEventListener('change', showPictureEdit);
-
   window.popup = {
     onCrossClickClose: onCrossClickClose,
     onPopupEsc: onPopupEsc,
     showPicturePreview: showPicturePreview,
-    showPictureEdit: showPictureEdit
+    showPictureEdit: showPictureEdit,
+    hidePictureEdit: hidePictureEdit,
+    backgroundScrollStart: backgroundScrollStart
   };
 })();

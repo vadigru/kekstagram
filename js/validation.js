@@ -41,7 +41,7 @@
 
   // check if hashtag have special characters ---------------------------------
   var isSpecialCharacter = function (arr) {
-    var allowedSymbols = /^[#][\W\w]+$/;
+    var allowedSymbols = /^[#][\w]+$/;
     var result = false;
     arr.forEach(function (item) {
       if (!item.match(allowedSymbols)) {
@@ -60,10 +60,21 @@
     return result;
   };
 
-  // hashtag errors handler ---------------------------------------------------
-  var onSubmitButtonClick = function () {
+  var onSubmitSuccessHandle = function () {
+    window.popup.hidePictureEdit();
+    window.modal.showModalSuccess();
+  };
+
+  var onSubmitErrorHandle = function () {
+    var errorMessage = 'Ошибка отправки данных.';
+    window.popup.hidePictureEdit();
+    window.modal.showModalError(errorMessage);
+  };
+
+  var arrangeValidation = function (evt) {
     var pictureHashtag = document.querySelector('.text__hashtags');
     var hashtags = pictureHashtag.value.split(' ');
+    var result = false;
     if (isHashtagEmpty(hashtags)) {
       pictureHashtag.setCustomValidity('Хэш-тег не может быть пустым.');
     } else if (!isHashtagPresent(hashtags) && isSpecialCharacter(hashtags)) {
@@ -80,7 +91,22 @@
                                       '. ' + 'Максимальная количество хэш-тегов "' + MAX_HASHTAG_COUNT + '".');
     } else {
       pictureHashtag.setCustomValidity('');
+      result = true;
     }
+
+    if (!result) {
+      pictureHashtag.style.outline = '0';
+      pictureHashtag.style.border = '2px solid red';
+    } else {
+      var form = document.querySelector('.img-upload__form');
+      window.backend.upload(new FormData(form), onSubmitSuccessHandle, onSubmitErrorHandle);
+      evt.preventDefault();
+    }
+  };
+
+  // hashtag errors handler ---------------------------------------------------
+  var onSubmitButtonClick = function (evt) {
+    arrangeValidation(evt);
   };
 
   window.validation = {

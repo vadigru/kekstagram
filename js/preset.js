@@ -80,16 +80,17 @@
     sliderPresetLevel.value = presetResult;
   };
 
+  // filter select from filter list ---------------------------------------------
   var toggleSlider = function (isVisible) {
     sliderBlock.classList.toggle('hidden', isVisible);
   };
 
-  // filter select from filter list ---------------------------------------------
   var onPresetClick = function (evt) {
     var target = evt.target;
     sliderLineWidth = sliderLine.offsetWidth;
     resetPreset();
     showSlider();
+    setPresetValue();
     toggleSlider(target.value === 'none');
     picturePreview.classList.add('effects__preview--' + target.value);
   };
@@ -104,7 +105,6 @@
       sliderDepthLine.style.width = shiftedLeft + 'px';
     }
   };
-
 
   // slider listener ----------------------------------------------------------
   sliderPin.addEventListener('mousedown', function (evt) {
