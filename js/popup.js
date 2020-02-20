@@ -12,6 +12,7 @@
   var preset = pictureEdit.querySelector('.effects');
   var submitButton = pictureEdit.querySelector('.img-upload__submit');
   var form = document.querySelector('.img-upload__form');
+  var loader = document.querySelector('.comments-loader');
 
   // page scroll handling when popup is opened ----------------------------------
   var backgroundScrollStop = function () {
@@ -37,7 +38,8 @@
     window.util.isEscEvent(evt, popupClose);
   };
 
-  // show/hide popup of picture edit ------------------------------------------
+  // prevent close of picture edit while ----------------------------------- ->
+  // -> hashtag or comment field is in focus ----------------------------------
   var preventPictureEditClose = function () {
     var pictureHashtag = pictureEdit.querySelector('.text__hashtags');
     var pictureComment = pictureEdit.querySelector('.text__description');
@@ -56,6 +58,7 @@
     });
   };
 
+  // show/hide popup of picture edit ------------------------------------------
   var hidePictureEdit = function () {
     pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
@@ -83,43 +86,25 @@
     preventPictureEditClose();
   };
 
-  // add cooments to popup with big photo --------------------------------------
-  var renderComments = function (array) {
-    var fragment = document.createDocumentFragment();
-    var commentsBlock = document.querySelector('.social__comments');
-    var commentTemplate = commentsBlock.querySelector('.social__comment');
-    commentsBlock.textContent = '';
-    array.forEach(function (item) {
-      var commentElement = commentTemplate.cloneNode(true);
-      var commentAvatar = commentElement.querySelector('.social__picture');
-      commentAvatar.src = item.avatar;
-      commentAvatar.alt = item.name;
-      commentAvatar.width = '35';
-      commentAvatar.height = '35';
-      commentElement.querySelector('.social__text').textContent = item.message;
-      fragment.appendChild(commentElement);
-    });
-    return fragment;
-  };
-
   // show/hide popup with big photo  ------------------------------------------------
   var hidePicturePreview = function () {
     picturePreview.classList.add('hidden');
+    window.comments.counter.resetCount();
+    loader.classList.remove('hidden');
     picturePreviewClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
   };
 
   var showPicturePreview = function (item) {
     picturePreview.classList.remove('hidden');
-    picturePreview.querySelector('.social__comment-count').classList.add('hidden');
-    picturePreview.querySelector('.comments-loader').classList.add('hidden');
     picturePreview.querySelector('.big-picture__img img').src = item.url;
     picturePreview.querySelector('.likes-count').textContent = item.likes;
     picturePreview.querySelector('.comments-count').textContent = item.comments.length;
     picturePreview.querySelector('.social__caption').textContent = item.description;
-    picturePreview.querySelector('.social__comments').appendChild(renderComments(item.comments));
+    picturePreview.querySelector('.social__comments').appendChild(window.comments.renderComments(window.comments.getFiveComments(item.comments)));
     picturePreviewClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
+    loader.addEventListener('click', window.comments.onLoadMoreClick);
     backgroundScrollStop();
   };
 
@@ -128,7 +113,6 @@
     onPopupEsc: onPopupEsc,
     showPicturePreview: showPicturePreview,
     showPictureEdit: showPictureEdit,
-    hidePictureEdit: hidePictureEdit,
-    backgroundScrollStart: backgroundScrollStart
+    hidePictureEdit: hidePictureEdit
   };
 })();
