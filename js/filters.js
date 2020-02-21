@@ -5,16 +5,12 @@
 
   // set active status to menu item -------------------------------------------
   var highlightFilterMenuItem = function (target) {
-    var filterButtons = document.querySelectorAll('.img-filters__button');
-    filterButtons.forEach(function (item) {
-      if (item.classList.contains('img-filters__button--active')) {
-        item.classList.remove('img-filters__button--active');
-      }
-    });
-    if (!target.classList.contains('img-filters__form') &&
-        !target.classList.contains('img-filters__button--active')) {
-      target.classList.add('img-filters__button--active');
+    var filterButtonActive = document.querySelector('.img-filters__button--active');
+    if (!target.classList.contains('img-filters__button')) {
+      return;
     }
+    filterButtonActive.classList.remove('img-filters__button--active');
+    target.classList.add('img-filters__button--active');
   };
 
   // update displayed user post thumbnails with sorted array ------------------
@@ -48,15 +44,14 @@
   var selectFilter = function (evt) {
     var target = evt.target;
     switch (target.id) {
-      case 'filter-default':
-        defaultPosts(userPosts);
-        break;
       case 'filter-random':
         randomPosts(userPosts);
         break;
       case 'filter-discussed':
         discussedPosts(userPosts);
         break;
+      default:
+        defaultPosts(userPosts);
     }
     highlightFilterMenuItem(target);
   };

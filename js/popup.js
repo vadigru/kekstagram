@@ -89,7 +89,7 @@
   // show/hide popup with big photo  ------------------------------------------------
   var hidePicturePreview = function () {
     picturePreview.classList.add('hidden');
-    window.comments.counter.resetCount();
+    window.comments.resetCount();
     loader.classList.remove('hidden');
     picturePreviewClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
@@ -101,7 +101,7 @@
     picturePreview.querySelector('.likes-count').textContent = item.likes;
     picturePreview.querySelector('.comments-count').textContent = item.comments.length;
     picturePreview.querySelector('.social__caption').textContent = item.description;
-    picturePreview.querySelector('.social__comments').appendChild(window.comments.renderComments(window.comments.getFiveComments(item.comments)));
+    picturePreview.querySelector('.social__comments').appendChild(window.comments.initComments(item.comments));
     picturePreviewClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
     loader.addEventListener('click', window.comments.onLoadMoreClick);

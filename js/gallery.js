@@ -48,7 +48,7 @@
   var showPosts = function (arr) {
     userPosts = arr;
     var postedPics = document.querySelector('.pictures');
-    postedPics.appendChild(buildFragment(userPosts));
+    postedPics.appendChild(buildFragment(arr));
   };
 
   var onLoadSuccessHandle = function (data) {
