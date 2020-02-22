@@ -6,7 +6,6 @@
   };
   var MIN_VALUE = 0;
   var UPDATE_INTERVAL = 500;
-  var lastTimeout;
 
   // get random element from array. get random number in range. ---------------
   var getRandomValue = function (min, array) {
@@ -44,13 +43,18 @@
   };
 
   // switch bounce effect elimination -----------------------------------------
-  var debounce = function (evt, action) {
-    if (lastTimeout) {
-      clearTimeout(lastTimeout);
-    }
-    lastTimeout = setTimeout(function () {
-      action(evt);
-    }, UPDATE_INTERVAL);
+  var debounce = function (cb) {
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+      lastTimeout = setTimeout(function () {
+        cb.apply(null, parameters);
+      }, UPDATE_INTERVAL);
+    };
   };
 
   window.util = {

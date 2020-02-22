@@ -3,16 +3,6 @@
   var RANDOM_POSTS_AMOUNT = 10;
   var userPosts;
 
-  // set active status to menu item -------------------------------------------
-  var highlightFilterMenuItem = function (target) {
-    var filterButtonActive = document.querySelector('.img-filters__button--active');
-    if (!target.classList.contains('img-filters__button')) {
-      return;
-    }
-    filterButtonActive.classList.remove('img-filters__button--active');
-    target.classList.add('img-filters__button--active');
-  };
-
   // update displayed user post thumbnails with sorted array ------------------
   var updatePosts = function (arr) {
     var postBlock = document.querySelector('.pictures');
@@ -40,9 +30,8 @@
     updatePosts(discussedArr);
   };
 
-  // add listener to filter menu items ----------------------------------------
-  var selectFilter = function (evt) {
-    var target = evt.target;
+  // selects which filter should run ------------------------------------------
+  var selectFilter = function (target) {
     switch (target.id) {
       case 'filter-random':
         randomPosts(userPosts);
@@ -53,8 +42,20 @@
       default:
         defaultPosts(userPosts);
     }
-    highlightFilterMenuItem(target);
   };
+
+  // set active status to menu item and trigger filtering ---------------------
+  var onFilterButtonClick = window.util.debounce(function (evt) {
+    var target = evt.target;
+    if (!target.classList.contains('img-filters__button')) {
+      return;
+    } else {
+      var filterButtonActive = document.querySelector('.img-filters__button--active');
+      filterButtonActive.classList.remove('img-filters__button--active');
+      target.classList.add('img-filters__button--active');
+      selectFilter(target);
+    }
+  });
 
   // activate filter menu -----------------------------------------------------
   var showFilterMenu = function (arr) {
@@ -62,9 +63,7 @@
     var filterBlock = document.querySelector('.img-filters');
     var filterList = filterBlock.querySelector('.img-filters__form');
     filterBlock.classList.remove('img-filters--inactive');
-    filterList.addEventListener('click', function (evt) {
-      window.util.debounce(evt, selectFilter);
-    });
+    filterList.addEventListener('click', onFilterButtonClick);
   };
 
   window.filters = {
