@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var userPosts = [];
+  var userPosts;
 
   // open big picture on thumbnail click --------------------------------------
   var onThumbnailClick = function (evt) {
@@ -29,9 +29,9 @@
   };
 
   // create fragment using generated data from userPosts -----------------------
-  var buildFragment = function (array) {
+  var buildFragment = function (arr) {
     var fragment = document.createDocumentFragment();
-    array.forEach(function (item, index) {
+    arr.forEach(function (item, index) {
       fragment.appendChild(renderPost(item, index));
     });
     return fragment;
@@ -45,17 +45,16 @@
   };
 
   // show user posts -----------------------------------------------------------
-  var showPosts = function (array) {
+  var showPosts = function (arr) {
+    userPosts = arr;
     var postedPics = document.querySelector('.pictures');
-    postedPics.appendChild(buildFragment(array));
+    postedPics.appendChild(buildFragment(arr));
   };
 
   var onLoadSuccessHandle = function (data) {
-    userPosts = data.map(function (item) {
-      return item;
-    });
-    showPosts(userPosts);
+    showPosts(data);
     addListeners();
+    window.filters.showFilterMenu(data);
   };
 
   var onLoadErrorHandle = function (errorMessage) {
@@ -63,4 +62,8 @@
   };
 
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
+
+  window.gallery = {
+    showPosts: showPosts
+  };
 })();

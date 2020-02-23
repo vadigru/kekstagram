@@ -3,10 +3,8 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var form = document.querySelector('.img-upload__form');
-
   var fileChooserPhoto = form.querySelector('input[type="file"]');
   var preview = document.querySelector('.img-upload__preview img');
-
   var previewPreset = document.querySelectorAll('.effects__preview');
 
 
