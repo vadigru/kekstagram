@@ -5,16 +5,7 @@
   var form = document.querySelector('.img-upload__form');
   var fileChooserPhoto = form.querySelector('input[type="file"]');
   var preview = document.querySelector('.img-upload__preview img');
-  var previewPreset = document.querySelectorAll('.effects__preview');
-
-
-  // clear preview of uploaded image ------------------------------------------
-  var clearPreview = function () {
-    preview.src = '';
-    previewPreset.forEach(function (item) {
-      item.style.backgroundImage = '';
-    });
-  };
+  var previewPresets = document.querySelectorAll('.effects__preview');
 
   // create preview of uploaded image ---------------------------------------
   var createPreview = function () {
@@ -26,39 +17,29 @@
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
+    if (!matches) {
+      var pictureUpload = document.querySelector('#upload-file');
+      window.modal.showModalError('Неподходящий тип файла.');
+      pictureUpload.value = '';
+    }
     if (matches) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        clearPreview();
         preview.src = reader.result;
-        previewPreset.forEach(function (item) {
+        previewPresets.forEach(function (item) {
           item.style.backgroundImage = 'url(' + reader.result + ')';
         });
-
+        window.popup.showPictureEdit();
       });
       reader.readAsDataURL(file);
     }
   };
 
-  // delay opening of picture edit --------------------------------------------
-  var delayShowPictureEdit = function () {
-    setTimeout(function () {
-      window.popup.showPictureEdit();
-    }, 100);
-  };
-
   form.addEventListener('change', function (evt) {
     var target = evt.target;
     if (target === fileChooserPhoto) {
-      clearPreview();
       createPreview();
-      delayShowPictureEdit();
     }
   });
-
-  window.upload = {
-    clearPreview: clearPreview,
-    createPreview: createPreview
-  };
 })();

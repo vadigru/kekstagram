@@ -23,7 +23,6 @@
     var fragment = document.createDocumentFragment();
     var commentsBlock = document.querySelector('.social__comments');
     var commentTemplate = commentsBlock.querySelector('.social__comment');
-    commentsBlock.textContent = '';
     arr.forEach(function (item) {
       var commentElement = commentTemplate.cloneNode(true);
       var commentAvatar = commentElement.querySelector('.social__picture');
@@ -42,19 +41,21 @@
     var commentsBlock = document.querySelector('.social__comment-count');
     var commentsCount = document.createElement('span');
     commentsCount.classList.add('comments-count');
-    commentsCount.textContent = result.length + ' из ' + arr.length + ' комментариев';
+    commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
     commentsBlock.textContent = '';
     commentsBlock.appendChild(commentsCount);
   };
 
   // get next comments to display with step of five comments ------------------
   var getNextComments = function (arr) {
+    var result;
     counter.doCount();
-    var result = arr.slice(0, counter.amount);
-    if (result.length >= arr.length) {
+    renderCommentsCount(counter.amount, arr);
+    result = arr.slice((counter.amount - COMMENTS_COUNT_STEP), counter.amount);
+    if (counter.amount >= arr.length) {
+      renderCommentsCount(arr.length, arr);
       counter.resetCount();
     }
-    renderCommentsCount(result, arr);
     return result;
   };
 
@@ -66,9 +67,8 @@
       result = arr;
       renderCommentsCount(result, arr);
       loader.classList.add('hidden');
-    } else {
-      result = getNextComments(arr);
     }
+    result = getNextComments(arr);
     return result;
   };
 

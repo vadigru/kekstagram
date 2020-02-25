@@ -11,6 +11,9 @@
   var getZoomNumber = function () {
     return parseInt(zoomLevel.value.substring(0, zoomLevel.value.length - 1), 10);
   };
+  var resetZoom = function () {
+    pictureZoom.style.transform = 'scale(' + 1 + ')';
+  };
 
   var zoomPicture = function (num) {
     pictureZoom.style.transform = 'scale(' + num / 100 + ')';
@@ -38,6 +41,7 @@
 
   window.zoom = {
     onZoomPlusClick: onZoomPlusClick,
-    onZoomMinusClick: onZoomMinusClick
+    onZoomMinusClick: onZoomMinusClick,
+    resetZoom: resetZoom
   };
 })();

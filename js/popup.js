@@ -15,19 +15,15 @@
   var loader = document.querySelector('.comments-loader');
 
   // page scroll handling when popup is opened ----------------------------------
-  var backgroundScrollStop = function () {
-    body.classList.add('modal-open');
-  };
-
-  var backgroundScrollStart = function () {
-    body.classList.remove('modal-open');
+  var toggleScroll = function () {
+    body.classList.toggle('modal-open');
   };
 
   // popup close handlers -----------------------------------------------------
   var popupClose = function () {
     hidePictureEdit();
     hidePicturePreview();
-    backgroundScrollStart();
+    toggleScroll();
   };
 
   var onCrossClickClose = function () {
@@ -62,11 +58,12 @@
   var hidePictureEdit = function () {
     pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
+    window.zoom.resetZoom();
     form.reset();
     zoomIn.removeEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.removeEventListener('click', window.zoom.onZoomMinusClick);
     preset.removeEventListener('click', window.preset.onPresetClick);
-    submitButton.removeEventListener('click', window.validation.onSubmitButtonClick);
+    submitButton.removeEventListener('click', window.form.onSubmitButtonClick);
     pictureEditClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
   };
@@ -75,14 +72,14 @@
     pictureEdit.classList.remove('hidden');
     zoomLevel.value = '100%';
     window.preset.resetPreset();
-    window.preset.hideSlider();
+    window.preset.toggleSlider('effect-level__line');
     zoomIn.addEventListener('click', window.zoom.onZoomPlusClick);
     zoomOut.addEventListener('click', window.zoom.onZoomMinusClick);
     preset.addEventListener('click', window.preset.onPresetClick);
-    submitButton.addEventListener('click', window.validation.onSubmitButtonClick);
+    submitButton.addEventListener('click', window.form.onSubmitButtonClick);
     pictureEditClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
-    backgroundScrollStop();
+    toggleScroll();
     preventPictureEditClose();
   };
 
@@ -96,16 +93,21 @@
   };
 
   var showPicturePreview = function (item) {
+    var commentsBlock = document.querySelector('.social__comments');
+    var comments = document.querySelectorAll('.social__comment');
     picturePreview.classList.remove('hidden');
     picturePreview.querySelector('.big-picture__img img').src = item.url;
     picturePreview.querySelector('.likes-count').textContent = item.likes;
     picturePreview.querySelector('.comments-count').textContent = item.comments.length;
     picturePreview.querySelector('.social__caption').textContent = item.description;
     picturePreview.querySelector('.social__comments').appendChild(window.comments.initComments(item.comments));
+    comments.forEach(function (comment) {
+      commentsBlock.removeChild(comment);
+    });
     picturePreviewClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
     loader.addEventListener('click', window.comments.onLoadMoreClick);
-    backgroundScrollStop();
+    toggleScroll();
   };
 
   window.popup = {
@@ -113,6 +115,7 @@
     onPopupEsc: onPopupEsc,
     showPicturePreview: showPicturePreview,
     showPictureEdit: showPictureEdit,
-    hidePictureEdit: hidePictureEdit
+    hidePictureEdit: hidePictureEdit,
+    toggleScroll: toggleScroll
   };
 })();
