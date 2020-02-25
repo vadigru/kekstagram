@@ -1,47 +1,46 @@
 'use strict';
 (function () {
   var MAX_HASHTAG_COUNT = 5;
+  var MAX_SYMBOL_COUNT = 20;
+  var pictureHashtag = document.querySelector('.text__hashtags');
 
   // hashtags validation --------------------------------------------------------
   // check if hashtag is empty ------------------------------------------------
   var isHashtagEmpty = function (arr) {
-    var result = false;
-    arr.forEach(function (item) {
-      if (item.charAt(0) === '#' && item.length === 1) {
-        result = true;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].charAt(0) === '#' && arr[i].length === 1) {
+        return true;
       }
-    });
-    return result;
+    }
+    return false;
   };
 
   // check if hashtag isn't too long ------------------------------------------
   var isHashtagTooLong = function (arr) {
-    var result = false;
-    arr.forEach(function (item) {
-      if (item.length > 20) {
-        result = true;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].length > MAX_SYMBOL_COUNT) {
+        return true;
       }
-    });
-    return result;
+    }
+    return false;
   };
 
   // check if same hashtags are enetred ---------------------------------------
   var isSimilarElement = function (arr) {
-    var result = false;
     var lowercaseArr = arr.map(function (item) {
       return item.toLowerCase();
     });
-    lowercaseArr.forEach(function (item, i) {
-      if (lowercaseArr.indexOf(item, i + 1) > -1 && item !== '') {
-        result = true;
+    for (var i = 0; i < lowercaseArr.length; i++) {
+      if (lowercaseArr.indexOf(lowercaseArr[i], i + 1) > -1 && lowercaseArr[i] !== '') {
+        return true;
       }
-    });
-    return result;
+    }
+    return false;
   };
 
   // check if hashtag have special characters ---------------------------------
   var isSpecialCharacter = function (arr) {
-    var allowedSymbols = /^[#][\w]+$/;
+    var allowedSymbols = /^[#][а-яА-ЯёЁa-zA-Z0-9]+$/;
     var result = false;
     arr.forEach(function (item) {
       if (!item.match(allowedSymbols)) {
@@ -53,63 +52,43 @@
 
   // check if none of hashtags presents ---------------------------------------
   var isHashtagPresent = function (arr) {
-    var result = false;
-    if (arr.length === 1 && arr[0] === '') {
-      result = true;
-    }
-    return result;
+    return arr.length === 1 && arr[0] === '';
   };
 
-  var onSubmitSuccessHandle = function () {
-    window.popup.hidePictureEdit();
-    window.modal.showModalSuccess();
-  };
-
-  var onSubmitErrorHandle = function () {
-    var errorMessage = 'Ошибка отправки данных.';
-    window.popup.hidePictureEdit();
-    window.modal.showModalError(errorMessage);
-  };
-
-  var arrangeValidation = function (evt) {
-    var pictureHashtag = document.querySelector('.text__hashtags');
+  var getError = function () {
     var hashtags = pictureHashtag.value.split(' ');
-    var result = false;
+    if (hashtags.length > MAX_HASHTAG_COUNT) {
+      return ('Введенных хэш-тегов ' + hashtags.length +
+                                      '. ' + 'Максимальная количество хэш-тегов "' + MAX_HASHTAG_COUNT + '".');
+    }
     if (isHashtagEmpty(hashtags)) {
-      pictureHashtag.setCustomValidity('Хэш-тег не может быть пустым.');
-    } else if (!isHashtagPresent(hashtags) && isSpecialCharacter(hashtags)) {
-      pictureHashtag.setCustomValidity('Хэш-тег должен начинаться с "#" и ' +
+      return ('Хэш-тег не может быть пустым.');
+    }
+    if (!isHashtagPresent(hashtags) && isSpecialCharacter(hashtags)) {
+      return ('Хэш-тег должен начинаться с "#" и ' +
                                       'не может содержать пробелы, спецсимволы, ' +
                                       'символы пунктуации и т.д.');
-    } else if (isSimilarElement(hashtags)) {
-      pictureHashtag.setCustomValidity('Хэш-теги не могут быть одинаковыми.');
-    } else if (isHashtagTooLong(hashtags)) {
-      pictureHashtag.setCustomValidity('Слишком длинный хэш-тег. ' +
-                                      'Максимальная длина хэш-тега 20 символов.');
-    } else if (hashtags.length > MAX_HASHTAG_COUNT) {
-      pictureHashtag.setCustomValidity('Введенных хэш-тегов ' + hashtags.length +
-                                      '. ' + 'Максимальная количество хэш-тегов "' + MAX_HASHTAG_COUNT + '".');
-    } else {
-      pictureHashtag.setCustomValidity('');
-      result = true;
     }
-
-    if (!result) {
-      pictureHashtag.style.outline = '0';
-      pictureHashtag.style.border = '2px solid red';
-    } else {
-      var form = document.querySelector('.img-upload__form');
-      window.backend.upload(new FormData(form), onSubmitSuccessHandle, onSubmitErrorHandle);
-      evt.preventDefault();
+    if (isSimilarElement(hashtags)) {
+      return ('Хэш-теги не могут быть одинаковыми.');
     }
+    if (isHashtagTooLong(hashtags)) {
+      return ('Слишком длинный хэш-тег. ' +
+                                      'Максимальная длина хэш-тега ' + MAX_SYMBOL_COUNT + ' символов.');
+    }
+    return '';
   };
 
-  // hashtag errors handler ---------------------------------------------------
-  var onSubmitButtonClick = function (evt) {
-    arrangeValidation(evt);
+  var arrangeValidation = function () {
+    var error = getError();
+    pictureHashtag.setCustomValidity(error);
+    if (error === '') {
+      return true;
+    }
+    return false;
   };
 
   window.validation = {
-    onSubmitButtonClick: onSubmitButtonClick
+    arrangeValidation: arrangeValidation
   };
 })();

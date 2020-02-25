@@ -12,15 +12,10 @@
   var sliderDepthLine = sliderBlock.querySelector('.effect-level__depth');
   var sliderLineWidth;
 
-  // hide filter slider -------------------------------------------------------
-  var hideSlider = function () {
-    sliderBlock.classList.add('hidden');
-  };
-
   // reset filter after filter selection from filter list ----------------------
   var resetPreset = function () {
     picturePreview.style.filter = '';
-    sliderPresetLevel.value = '';
+    sliderPresetLevel.value = 0;
     picturePreview.className = '';
     sliderPin.style.left = sliderLineWidth + 'px';
     sliderDepthLine.style.width = sliderLineWidth + 'px';
@@ -135,7 +130,7 @@
     resetPreset: resetPreset,
     setPresetValue: setPresetValue,
     onPresetClick: onPresetClick,
-    hideSlider: hideSlider
+    toggleSlider: toggleSlider
   };
 })();
 
