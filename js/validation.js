@@ -7,22 +7,16 @@
   // hashtags validation --------------------------------------------------------
   // check if hashtag is empty ------------------------------------------------
   var isHashtagEmpty = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].charAt(0) === '#' && arr[i].length === 1) {
-        return true;
-      }
-    }
-    return false;
+    return arr.some(function (el) {
+      return el.charAt(0) === '#' && el.length === 1;
+    });
   };
 
   // check if hashtag isn't too long ------------------------------------------
   var isHashtagTooLong = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].length > MAX_SYMBOL_COUNT) {
-        return true;
-      }
-    }
-    return false;
+    return arr.some(function (el) {
+      return el.length > MAX_SYMBOL_COUNT;
+    });
   };
 
   // check if same hashtags are enetred ---------------------------------------
@@ -30,17 +24,14 @@
     var lowercaseArr = arr.map(function (item) {
       return item.toLowerCase();
     });
-    for (var i = 0; i < lowercaseArr.length; i++) {
-      if (lowercaseArr.indexOf(lowercaseArr[i], i + 1) > -1 && lowercaseArr[i] !== '') {
-        return true;
-      }
-    }
-    return false;
+    return lowercaseArr.some(function (el, i) {
+      return lowercaseArr.indexOf(el, i + 1) > -1 && el !== '';
+    });
   };
 
   // check if hashtag have special characters ---------------------------------
   var isSpecialCharacter = function (arr) {
-    var allowedSymbols = /^[#][а-яА-ЯёЁa-zA-Z0-9]+$/;
+    var allowedSymbols = /^[#][а-яА-ЯёЁa-zA-Z0-9]+$/i;
     var result = false;
     arr.forEach(function (item) {
       if (!item.match(allowedSymbols)) {
@@ -55,40 +46,40 @@
     return arr.length === 1 && arr[0] === '';
   };
 
+  // get error message if incorrect data entered ------------------------------
   var getError = function () {
     var hashtags = pictureHashtag.value.split(' ');
     if (hashtags.length > MAX_HASHTAG_COUNT) {
-      return ('Введенных хэш-тегов ' + hashtags.length +
-                                      '. ' + 'Максимальная количество хэш-тегов "' + MAX_HASHTAG_COUNT + '".');
+      return 'Введенных хэш-тегов ' + hashtags.length + '. ' +
+             'Максимальное количество хэш-тегов "' + MAX_HASHTAG_COUNT + '".';
     }
     if (isHashtagEmpty(hashtags)) {
-      return ('Хэш-тег не может быть пустым.');
+      return 'Хэш-тег не может состоять только из "#".';
     }
     if (!isHashtagPresent(hashtags) && isSpecialCharacter(hashtags)) {
-      return ('Хэш-тег должен начинаться с "#" и ' +
-                                      'не может содержать пробелы, спецсимволы, ' +
-                                      'символы пунктуации и т.д.');
+      return 'Хэш-тег должен начинаться с "#" и ' +
+             'не может содержать пробелы, спецсимволы, ' +
+             'символы пунктуации и т.д.';
     }
     if (isSimilarElement(hashtags)) {
-      return ('Хэш-теги не могут быть одинаковыми.');
+      return 'Хэш-теги не могут быть одинаковыми.';
     }
     if (isHashtagTooLong(hashtags)) {
-      return ('Слишком длинный хэш-тег. ' +
-                                      'Максимальная длина хэш-тега ' + MAX_SYMBOL_COUNT + ' символов.');
+      return 'Слишком длинный хэш-тег. ' +
+             'Максимальная длина хэш-тега ' +
+              MAX_SYMBOL_COUNT + ' символов.';
     }
     return '';
   };
 
+  // initialize form validation ------------------------------------------------
   var arrangeValidation = function () {
     var error = getError();
     pictureHashtag.setCustomValidity(error);
-    if (error === '') {
-      return true;
-    }
-    return false;
+    return error === '';
   };
 
   window.validation = {
-    arrangeValidation: arrangeValidation
+    arrange: arrangeValidation
   };
 })();

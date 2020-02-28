@@ -6,7 +6,7 @@
   // hide error/success modal -------------------------------------------------
   var hideModal = function () {
     pageMain.removeChild(activeModal);
-    window.popup.toggleScroll();
+    window.popup.toggleScroll(!'modal-open');
     activeModal.removeEventListener('click', onModalClick);
     document.removeEventListener('keydown', onModalEscPress);
   };
@@ -37,17 +37,18 @@
     templateElement.querySelector('.error__title').textContent = message;
     templateElement.querySelector('.error__button').textContent = 'Попробовать снова';
     showModal(templateElement);
-    window.popup.toggleScroll();
+    window.popup.toggleScroll('modal-open');
   };
 
   var showModalSuccess = function () {
     var template = document.querySelector('#success').content.querySelector('.success');
     var templateElement = template.cloneNode(true);
     showModal(templateElement);
+    window.popup.toggleScroll('modal-open');
   };
 
   window.modal = {
-    showModalError: showModalError,
-    showModalSuccess: showModalSuccess
+    showError: showModalError,
+    showSuccess: showModalSuccess
   };
 })();

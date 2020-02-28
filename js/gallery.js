@@ -5,9 +5,10 @@
   // open big picture on thumbnail click --------------------------------------
   var onThumbnailClick = function (evt) {
     var target = evt.target;
-    var pictureId = target.getAttribute('data-id');
+    var pictureId = target.dataset.id;
     if (pictureId) {
       evt.preventDefault();
+      window.popup.hidePicturePreview();
       window.popup.showPicturePreview(userPosts[pictureId]);
     }
   };
@@ -20,8 +21,8 @@
   var renderPost = function (data, index) {
     var template = document.querySelector('#picture').content;
     var templateElement = template.cloneNode(true);
-    templateElement.querySelector('.picture').setAttribute('data-id', index);
-    templateElement.querySelector('.picture__img').setAttribute('data-id', index);
+    templateElement.querySelector('.picture').dataset.id = index;
+    templateElement.querySelector('.picture__img').dataset.id = index;
     templateElement.querySelector('.picture__img').src = data.url;
     templateElement.querySelector('.picture__likes').textContent = data.likes;
     templateElement.querySelector('.picture__comments').textContent = data.comments.length;
@@ -54,11 +55,11 @@
   var onLoadSuccessHandle = function (data) {
     showPosts(data);
     addListeners();
-    window.filters.showFilterMenu(data);
+    window.filters.showMenu(data);
   };
 
   var onLoadErrorHandle = function (errorMessage) {
-    window.modal.showModalError(errorMessage);
+    window.modal.showError(errorMessage);
   };
 
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);

@@ -15,15 +15,15 @@
   var loader = document.querySelector('.comments-loader');
 
   // page scroll handling when popup is opened ----------------------------------
-  var toggleScroll = function () {
-    body.classList.toggle('modal-open');
+  var toggleScroll = function (isVisible) {
+    body.classList.toggle('modal-open', isVisible);
   };
 
   // popup close handlers -----------------------------------------------------
   var popupClose = function () {
     hidePictureEdit();
     hidePicturePreview();
-    toggleScroll();
+    toggleScroll(!'modal-open');
   };
 
   var onCrossClickClose = function () {
@@ -58,12 +58,12 @@
   var hidePictureEdit = function () {
     pictureEdit.classList.add('hidden');
     pictureUpload.value = '';
-    window.zoom.resetZoom();
+    window.zoom.reset();
     form.reset();
-    zoomIn.removeEventListener('click', window.zoom.onZoomPlusClick);
-    zoomOut.removeEventListener('click', window.zoom.onZoomMinusClick);
-    preset.removeEventListener('click', window.preset.onPresetClick);
-    submitButton.removeEventListener('click', window.form.onSubmitButtonClick);
+    zoomIn.removeEventListener('click', window.zoom.onPlusBtnClick);
+    zoomOut.removeEventListener('click', window.zoom.onMinusBtnClick);
+    preset.removeEventListener('click', window.preset.onSampleClick);
+    submitButton.removeEventListener('click', window.form.onSubmitBtnClick);
     pictureEditClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
   };
@@ -71,22 +71,22 @@
   var showPictureEdit = function () {
     pictureEdit.classList.remove('hidden');
     zoomLevel.value = '100%';
-    window.preset.resetPreset();
+    window.preset.reset();
     window.preset.toggleSlider('effect-level__line');
-    zoomIn.addEventListener('click', window.zoom.onZoomPlusClick);
-    zoomOut.addEventListener('click', window.zoom.onZoomMinusClick);
-    preset.addEventListener('click', window.preset.onPresetClick);
-    submitButton.addEventListener('click', window.form.onSubmitButtonClick);
+    zoomIn.addEventListener('click', window.zoom.onPlusBtnClick);
+    zoomOut.addEventListener('click', window.zoom.onMinusBtnClick);
+    preset.addEventListener('click', window.preset.onSampleClick);
+    submitButton.addEventListener('click', window.form.onSubmitBtnClick);
     pictureEditClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
-    toggleScroll();
+    toggleScroll('modal-open');
     preventPictureEditClose();
   };
 
   // show/hide popup with big photo  ------------------------------------------------
   var hidePicturePreview = function () {
     picturePreview.classList.add('hidden');
-    window.comments.resetCount();
+    window.comments.counter.resetCount();
     loader.classList.remove('hidden');
     picturePreviewClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
@@ -100,20 +100,19 @@
     picturePreview.querySelector('.likes-count').textContent = item.likes;
     picturePreview.querySelector('.comments-count').textContent = item.comments.length;
     picturePreview.querySelector('.social__caption').textContent = item.description;
-    picturePreview.querySelector('.social__comments').appendChild(window.comments.initComments(item.comments));
+    picturePreview.querySelector('.social__comments').appendChild(window.comments.init(item.comments));
     comments.forEach(function (comment) {
       commentsBlock.removeChild(comment);
     });
     picturePreviewClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);
     loader.addEventListener('click', window.comments.onLoadMoreClick);
-    toggleScroll();
+    toggleScroll('modal-open');
   };
 
   window.popup = {
-    onCrossClickClose: onCrossClickClose,
-    onPopupEsc: onPopupEsc,
     showPicturePreview: showPicturePreview,
+    hidePicturePreview: hidePicturePreview,
     showPictureEdit: showPictureEdit,
     hidePictureEdit: hidePictureEdit,
     toggleScroll: toggleScroll
