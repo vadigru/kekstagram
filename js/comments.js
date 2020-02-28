@@ -3,7 +3,7 @@
   var COMMENTS_COUNT_STEP = 5;
   var socComments = document.querySelector('.social__comments');
   var loader = document.querySelector('.comments-loader');
-  var commentsArr;
+  var comments;
 
   // comments counter ---------------------------------------------------------
   var counter = {
@@ -62,7 +62,7 @@
   // get first five comments to display ---------------------------------------
   var getInitialComments = function (arr) {
     var result;
-    commentsArr = arr;
+    comments = arr;
     if (arr.length <= COMMENTS_COUNT_STEP) {
       result = arr;
       renderCommentsCount(result, arr);
@@ -79,7 +79,7 @@
 
   // set listener to comment loader button ------------------------------------
   var onLoadMoreClick = function () {
-    socComments.appendChild(renderComments(getNextComments(commentsArr)));
+    socComments.appendChild(renderComments(getNextComments(comments)));
   };
 
   window.comments = {
