@@ -66,6 +66,6 @@
   };
 
   window.filters = {
-    showFilterMenu: showFilterMenu
+    showMenu: showFilterMenu
   };
 })();

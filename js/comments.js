@@ -3,7 +3,7 @@
   var COMMENTS_COUNT_STEP = 5;
   var socComments = document.querySelector('.social__comments');
   var loader = document.querySelector('.comments-loader');
-  var comments;
+  var commentsArr;
 
   // comments counter ---------------------------------------------------------
   var counter = {
@@ -38,12 +38,12 @@
 
   // show number of displayed comments ----------------------------------------
   var renderCommentsCount = function (result, arr) {
-    var commentsBlock = document.querySelector('.social__comment-count');
+    var commentsCountBlock = document.querySelector('.social__comment-count');
     var commentsCount = document.createElement('span');
     commentsCount.classList.add('comments-count');
     commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
-    commentsBlock.textContent = '';
-    commentsBlock.appendChild(commentsCount);
+    commentsCountBlock.textContent = '';
+    commentsCountBlock.appendChild(commentsCount);
   };
 
   // get next comments to display with step of five comments ------------------
@@ -62,7 +62,7 @@
   // get first five comments to display ---------------------------------------
   var getInitialComments = function (arr) {
     var result;
-    comments = arr;
+    commentsArr = arr;
     if (arr.length <= COMMENTS_COUNT_STEP) {
       result = arr;
       renderCommentsCount(result, arr);
@@ -79,12 +79,12 @@
 
   // set listener to comment loader button ------------------------------------
   var onLoadMoreClick = function () {
-    socComments.appendChild(renderComments(getNextComments(comments)));
+    socComments.appendChild(renderComments(getNextComments(commentsArr)));
   };
 
   window.comments = {
     onLoadMoreClick: onLoadMoreClick,
-    initComments: initComments,
-    resetCount: counter.resetCount
+    init: initComments,
+    counter: counter
   };
 })();

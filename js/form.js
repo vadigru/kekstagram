@@ -4,7 +4,7 @@
 
   var onSubmitSuccessHandle = function () {
     window.popup.hidePictureEdit();
-    window.modal.showModalSuccess();
+    window.modal.showSuccess();
     pictureHashtag.style.outline = '';
     pictureHashtag.style.border = 'none';
   };
@@ -12,11 +12,11 @@
   var onSubmitErrorHandle = function () {
     var errorMessage = 'Ошибка отправки данных.';
     window.popup.hidePictureEdit();
-    window.modal.showModalError(errorMessage);
+    window.modal.showError(errorMessage);
   };
 
-  var onSubmitButtonClick = function (evt) {
-    if (window.validation.arrangeValidation()) {
+  var onSubmitBtnClick = function (evt) {
+    if (window.validation.arrange()) {
       var form = document.querySelector('.img-upload__form');
       window.backend.upload(new FormData(form), onSubmitSuccessHandle, onSubmitErrorHandle);
       evt.preventDefault();
@@ -27,6 +27,6 @@
   };
 
   window.form = {
-    onSubmitButtonClick: onSubmitButtonClick
+    onSubmitBtnClick: onSubmitBtnClick
   };
 })();

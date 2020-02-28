@@ -76,7 +76,7 @@
     sliderBlock.classList.toggle('hidden', isVisible);
   };
 
-  var onPresetClick = function (evt) {
+  var onSampleClick = function (evt) {
     var target = evt.target;
     toggleSlider(target.value === 'none');
     sliderLineWidth = sliderLine.offsetWidth;
@@ -127,9 +127,8 @@
   });
 
   window.preset = {
-    resetPreset: resetPreset,
-    setPresetValue: setPresetValue,
-    onPresetClick: onPresetClick,
+    reset: resetPreset,
+    onSampleClick: onSampleClick,
     toggleSlider: toggleSlider
   };
 })();

@@ -19,12 +19,11 @@
     });
     if (!matches) {
       var pictureUpload = document.querySelector('#upload-file');
-      window.modal.showModalError('Неподходящий тип файла.');
+      window.modal.showError('Неподходящий тип файла.');
       pictureUpload.value = '';
     }
     if (matches) {
       var reader = new FileReader();
-
       reader.addEventListener('load', function () {
         preview.src = reader.result;
         previewPresets.forEach(function (item) {
