@@ -4,6 +4,8 @@
   var MAX_BRIGHTNESS = 3;
   var BRIGHTNESS_CORRECTION = 1;
   var MIN_PIN_POSITION = 0;
+  var PIN_POSITION_MIN_CORRECTION = 20;
+  var PIN_POSITION_MAX_CORRECTION = 474;
   var picturePreview = document.querySelector('.img-upload__preview img');
   var sliderBlock = document.querySelector('.effect-level');
   var sliderPresetLevel = sliderBlock.querySelector('.effect-level__value');
@@ -96,6 +98,30 @@
     }
   };
 
+  var setLinePosition = function (value) {
+    sliderPin.style.left = value + 'px';
+    sliderDepthLine.style.width = value + 'px';
+  };
+
+  var onSliderLineClick = function (evt) {
+    var sliderLineClickPoint;
+    var target = evt.target;
+    if (target === sliderDepthLine || target === sliderLine) {
+      sliderLineClickPoint = evt.offsetX;
+    }
+    if (target === sliderBlock) {
+      if (evt.offsetX < PIN_POSITION_MIN_CORRECTION) {
+        sliderLineClickPoint = MIN_PIN_POSITION;
+      } else if (evt.offsetX > PIN_POSITION_MAX_CORRECTION) {
+        sliderLineClickPoint = sliderLineWidth;
+      } else {
+        sliderLineClickPoint = evt.offsetX - PIN_POSITION_MIN_CORRECTION;
+      }
+    }
+    setLinePosition(sliderLineClickPoint);
+    setPresetValue();
+  };
+
   // slider listener ----------------------------------------------------------
   sliderPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -129,6 +155,7 @@
   window.preset = {
     reset: resetPreset,
     onSampleClick: onSampleClick,
+    onSliderLineClick: onSliderLineClick,
     toggleSlider: toggleSlider
   };
 })();
