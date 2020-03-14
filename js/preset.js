@@ -94,7 +94,7 @@
     picturePreview.classList.add('effects__preview--' + target.value);
   };
 
-  // change slider pin position on line click or by arroe key press -----------
+  // change slider pin position on line click or by arrows key press -----------
   var setLinePosition = function (value) {
     sliderPin.style.left = value + 'px';
     sliderDepthLine.style.width = value + 'px';
