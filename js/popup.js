@@ -11,6 +11,7 @@
   var zoomIn = pictureEdit.querySelector('.scale__control--bigger');
   var preset = pictureEdit.querySelector('.effects');
   var sliderBlock = document.querySelector('.effect-level');
+  var sliderPin = sliderBlock.querySelector('.effect-level__pin');
   var submitButton = pictureEdit.querySelector('.img-upload__submit');
   var form = document.querySelector('.img-upload__form');
   var loader = document.querySelector('.comments-loader');
@@ -65,6 +66,7 @@
     zoomOut.removeEventListener('click', window.zoom.onMinusBtnClick);
     preset.removeEventListener('click', window.preset.onSampleClick);
     sliderBlock.removeEventListener('click', window.preset.onSliderLineClick);
+    sliderPin.removeEventListener('keydown', window.preset.onSliderPinArrowPress);
     submitButton.removeEventListener('click', window.form.onSubmitBtnClick);
     pictureEditClose.removeEventListener('click', onCrossClickClose);
     document.removeEventListener('keydown', onPopupEsc);
@@ -79,6 +81,7 @@
     zoomOut.addEventListener('click', window.zoom.onMinusBtnClick);
     preset.addEventListener('click', window.preset.onSampleClick);
     sliderBlock.addEventListener('click', window.preset.onSliderLineClick);
+    sliderPin.addEventListener('keydown', window.preset.onSliderPinArrowPress);
     submitButton.addEventListener('click', window.form.onSubmitBtnClick);
     pictureEditClose.addEventListener('click', onCrossClickClose);
     document.addEventListener('keydown', onPopupEsc);

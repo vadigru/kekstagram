@@ -1,9 +1,16 @@
 'use strict';
 (function () {
+  var KeyCode = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40
+  };
   var MAX_BLUR = 3;
   var MAX_BRIGHTNESS = 3;
   var BRIGHTNESS_CORRECTION = 1;
   var MIN_PIN_POSITION = 0;
+  var PIN_KEYPRESS_STEP = 10;
   var PIN_POSITION_MIN_CORRECTION = 20;
   var PIN_POSITION_MAX_CORRECTION = 474;
   var picturePreview = document.querySelector('.img-upload__preview img');
@@ -87,17 +94,7 @@
     picturePreview.classList.add('effects__preview--' + target.value);
   };
 
-  // change slider pin position -----------------------------------------------
-  var setPinPosition = function (shift) {
-    var shiftedLeft = sliderPin.offsetLeft - shift;
-    var maxPinPosition = sliderLineWidth;
-
-    if (shiftedLeft >= MIN_PIN_POSITION && shiftedLeft <= maxPinPosition) {
-      sliderPin.style.left = shiftedLeft + 'px';
-      sliderDepthLine.style.width = shiftedLeft + 'px';
-    }
-  };
-
+  // change slider pin position on line click or by arrows key press -----------
   var setLinePosition = function (value) {
     sliderPin.style.left = value + 'px';
     sliderDepthLine.style.width = value + 'px';
@@ -120,6 +117,39 @@
     }
     setLinePosition(sliderLineClickPoint);
     setPresetValue();
+  };
+
+  var onSliderPinArrowPress = function (evt) {
+    evt.preventDefault();
+    if (evt.keyCode === KeyCode.LEFT || evt.keyCode === KeyCode.DOWN) {
+      if (sliderPin.offsetLeft <= MIN_PIN_POSITION + PIN_KEYPRESS_STEP) {
+        sliderPin.style.left = MIN_PIN_POSITION + PIN_KEYPRESS_STEP + 'px';
+      }
+      var posXminus = sliderPin.offsetLeft - PIN_KEYPRESS_STEP;
+      setLinePosition(posXminus);
+      setPresetValue();
+    }
+
+    if (evt.keyCode === KeyCode.RIGHT || evt.keyCode === KeyCode.UP) {
+      evt.preventDefault();
+      if (sliderPin.offsetLeft >= sliderLineWidth - PIN_KEYPRESS_STEP) {
+        sliderPin.style.left = sliderLineWidth - PIN_KEYPRESS_STEP + 'px';
+      }
+      var posXplus = sliderPin.offsetLeft + PIN_KEYPRESS_STEP;
+      setLinePosition(posXplus);
+      setPresetValue();
+    }
+  };
+
+  // change slider pin position -----------------------------------------------
+  var setPinPosition = function (shift) {
+    var shiftedLeft = sliderPin.offsetLeft - shift;
+    var maxPinPosition = sliderLineWidth;
+
+    if (shiftedLeft >= MIN_PIN_POSITION && shiftedLeft <= maxPinPosition) {
+      sliderPin.style.left = shiftedLeft + 'px';
+      sliderDepthLine.style.width = shiftedLeft + 'px';
+    }
   };
 
   // slider listener ----------------------------------------------------------
@@ -156,6 +186,7 @@
     reset: resetPreset,
     onSampleClick: onSampleClick,
     onSliderLineClick: onSliderLineClick,
+    onSliderPinArrowPress: onSliderPinArrowPress,
     toggleSlider: toggleSlider
   };
 })();
