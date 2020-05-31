@@ -8,6 +8,7 @@
   };
   var UPLOAD_URL = 'https://javascript.pages.academy/kekstagram';
   var LOAD_URL = 'https://javascript.pages.academy/kekstagram/data';
+
   var SERVER_TIME = 10000;
 
   // success/unsuccess request handling ---------------------------------------
