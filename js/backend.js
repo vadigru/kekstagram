@@ -6,8 +6,8 @@
     NOT_FOUND: 404,
     INTERNAL_SERVER_ERROR: 500,
   };
-  var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
-  var LOAD_URL = ' https://js.dump.academy/kekstagram/data';
+  var UPLOAD_URL = 'https://javascript.pages.academy/kekstagram';
+  var LOAD_URL = 'https://javascript.pages.academy/kekstagram/data';
   var SERVER_TIME = 10000;
 
   // success/unsuccess request handling ---------------------------------------
