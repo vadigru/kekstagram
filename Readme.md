@@ -2,7 +2,8 @@
 
 * Студент: [Vadim Grunenko](https://up.htmlacademy.ru/javascript/19/user/507341).
 * Наставник: [Ольга Поликашина](https://htmlacademy.ru/profile/id890283).
-* Онлайн версия: https://vadigru.github.io/kekstagram
+* Демо: https://vadigru.github.io/kekstagram
+
 ---
 
 <a href="https://htmlacademy.ru/intensive/javascript"><img align="left" width="50" height="50" alt="HTML Academy" src="https://up.htmlacademy.ru/static/img/intensive/javascript/logo-for-github-2.png"></a>
